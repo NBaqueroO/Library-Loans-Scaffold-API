@@ -71,7 +71,6 @@ export class ItemsService {
   }
 
   private async isItemAvailable(itemId: string): Promise<boolean> {
-    // An item is available if there are no active or overdue loans
     const activeLoans = await this.itemRepository.manager
       .createQueryBuilder('loan', 'loan')
       .where('loan.itemId = :itemId', { itemId })
