@@ -1,8 +1,10 @@
+/* eslint-disable prettier/prettier */
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
@@ -22,6 +24,9 @@ async function bootstrap(): Promise<void> {
       transformOptions: { enableImplicitConversion: true },
     }),
   );
+
+  // Apply global JWT auth guard
+  app.useGlobalGuards(app.get(JwtAuthGuard));
 
   if (swaggerEnabled) {
     const swaggerConfig = new DocumentBuilder()
